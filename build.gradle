@@ -3,15 +3,15 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.4.RELEASE")
+        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.2.4.RELEASE')
+        classpath('mysql:mysql-connector-java:5.1.16')
     }
 }
 
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
-
-mainClassName = 'SparkWorkout.SparkWorkoutApplication'
+apply plugin: 'application'
 
 jar {
     baseName = 'gs-spring-boot'
@@ -22,20 +22,16 @@ repositories {
     mavenCentral()
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
 dependencies {
-    // tag::jetty[]
-    compile("org.springframework.boot:spring-boot-starter-web") {
-        exclude module: "spring-boot-starter-tomcat"
-    }
-    compile("org.springframework.boot:spring-boot-starter-jetty")
-    // end::jetty[]
-    // tag::actuator[]
-    compile("org.springframework.boot:spring-boot-starter-actuator")
-    // end::actuator[]
-    runtime('mysql:mysql-connector-java:5.1.6')
+    compile('org.springframework.boot:spring-boot-starter-jdbc')
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile('org.springframework.boot:spring-boot-starter-actuator')
+
+    compile('javax.inject:javax.inject:1')
+
+    compile('mysql:mysql-connector-java:5.1.6')
+
+    compile group: "com.google.guava", name: "guava", version: "12.0"
 
     testCompile("junit:junit")
 }

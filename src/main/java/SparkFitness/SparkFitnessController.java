@@ -1,6 +1,7 @@
 package SparkFitness;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -12,16 +13,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RestController
 public class SparkFitnessController {
     @Autowired
-    UsersDao usersDao;
+    UsersDAO usersDao;
 
-    @RequestMapping("/")
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public String index() {
-        String message = "Welcome to SparkFitness!";
+        String message;
         try {
-            message = "User ID: " + usersDao.getUserId();
+            message = "User ID: " + usersDao.getUserIds();
         } catch (Exception ex) {
             message = ex.getMessage();
         }
         return message;
+    }
+
+    @RequestMapping(value = "/getLastRoutine", method = RequestMethod.GET)
+    public void getLastRoutine() {
+
     }
 }
