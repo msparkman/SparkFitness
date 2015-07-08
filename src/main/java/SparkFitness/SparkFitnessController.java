@@ -3,12 +3,18 @@ package SparkFitness;
 import SparkFitness.database.FitnessDAO;
 import SparkFitness.database.Routine;
 import SparkFitness.database.Set;
+import SparkFitness.server.WorkoutBo;
+import com.sun.corba.se.spi.orbutil.threadpool.Work;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.annotation.Resource;
+import javax.inject.Inject;
 import java.util.List;
 
 /**
@@ -18,16 +24,15 @@ import java.util.List;
  */
 @RestController
 public class SparkFitnessController {
+
     @Autowired
-    FitnessDAO fitnessDao;
-    // TODO use WorkoutBo instead of the FitnessDAO
-    //WorkoutBo workoutBo;
+    private WorkoutBo workoutBo;
 
     @RequestMapping(value = "/getAllRoutines/{userId}", method = RequestMethod.GET)
     public String getAllRoutines(@PathVariable("userId") int userId) {
         StringBuilder message = new StringBuilder();
         try {
-            List<Routine> routineList = fitnessDao.getAllRoutines(userId);
+            List<Routine> routineList = workoutBo.getAllRoutines(userId);
 
             // Loop through and print out the routines
             for (Routine routine : routineList) {
@@ -46,6 +51,8 @@ public class SparkFitnessController {
                         message.append("Number of Reps: ").append(set.getNumberOfReps()).append("\n");
                         message.append("Weight: ").append(set.getWeight()).append("\n");
                         message.append("Comment: ").append(set.getComment()).append("\n");
+
+                        setNumber++;
                     }
                 }
 
