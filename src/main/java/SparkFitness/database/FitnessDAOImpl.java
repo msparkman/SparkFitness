@@ -56,6 +56,50 @@ public class FitnessDAOImpl implements FitnessDAO {
     }
 
     @Override
+    public Routine getLastRoutineByUserId(int userId) {
+        Routine routine = jdbcTemplate.queryForObject("SELECT " +
+                        "* " +
+                        "FROM " +
+                        "routines " +
+                        "WHERE " +
+                        "user_id = ? " +
+                        "ORDER BY " +
+                        "date DESC " +
+                        "LIMIT 1",
+                new Object[]{userId},
+                ROUTINE_ROW_MAPPER);
+        if (routine == null) {
+            return new Routine();
+        }
+
+        return routine;
+    }
+
+    @Override
+    public void insertRoutine(Routine routine) {
+        jdbcTemplate.update("INSERT INTO " +
+                "routines " +
+                "(user_id," +
+                "date," +
+                "type," +
+                "name) " +
+                "VALUES " +
+                "(?, ?, ?, ?)",
+                new Object[] { routine.getUserId(), routine.getDate(), routine.getType(), routine.getName() },
+                new int[] { Types.INTEGER, Types.DATE, Types.VARCHAR, Types.VARCHAR });
+    }
+
+    @Override
+    public void deleteRoutine(int routineId) {
+        jdbcTemplate.update("DELETE FROM " +
+                        "routines " +
+                        "WHERE " +
+                        "routine_id = ? ",
+                new Object[] { routineId },
+                new int[] { Types.INTEGER });
+    }
+
+    @Override
     public List<Set> getSetsByRoutineId(int routineId) {
         List<Set> setList = jdbcTemplate.query("SELECT " +
                         "* " +
@@ -71,5 +115,29 @@ public class FitnessDAOImpl implements FitnessDAO {
         }
 
         return setList;
+    }
+
+    @Override
+    public void insertSet(Set set) {
+        jdbcTemplate.update("INSERT INTO " +
+                        "sets " +
+                        "(routine_id," +
+                        "num_reps," +
+                        "weight," +
+                        "comment) " +
+                        "VALUES " +
+                        "(?, ?, ?, ?)",
+                new Object[] { set.getRoutineId(), set.getNumberOfReps(), set.getWeight(), set.getComment() },
+                new int[] { Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.VARCHAR });
+    }
+
+    @Override
+    public void deleteSetsByRoutineId(int routineId) {
+        jdbcTemplate.update("DELETE FROM " +
+                        "sets " +
+                        "WHERE " +
+                        "routine_id = ? ",
+                new Object[] { routineId },
+                new int[] { Types.INTEGER });
     }
 }

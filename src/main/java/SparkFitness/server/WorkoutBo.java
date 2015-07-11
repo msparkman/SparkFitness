@@ -19,6 +19,28 @@ public interface WorkoutBo {
      * @param userId the user ID
      * @return List<Routine> containing the user's routines
      */
-    List getAllRoutines(int userId);
+    List<Routine> getAllRoutines(int userId);
+
+    /**
+     * Retrieves the last routine entered by the given user ID.
+     *
+     * @param userId the user ID
+     * @return Routine containing the last entered routine
+     */
+    Routine getLastRoutine(int userId);
+
+    /**
+     * Saves a routine and its sets.
+     *
+     * @param routine the routine
+     */
+    void saveRoutine(Routine routine);
+
+    /**
+     * Deletes a routine and all of its sets.
+     *
+     * @param routineId the routine ID
+     */
+    void deleteRoutine(int routineId);
 
 }

@@ -38,4 +38,45 @@ public class WorkoutBoImpl implements WorkoutBo {
 
         return routinesList;
     }
+
+    @Override
+    public Routine getLastRoutine(int userId) {
+        if (userId < 1) {
+            throw new IllegalArgumentException("Invalid user ID: " + userId);
+        }
+
+        Routine routine = fitnessDao.getLastRoutineByUserId(userId);
+        // Get the sets for this routine
+        routine.setSetList(fitnessDao.getSetsByRoutineId(routine.getRoutineId()));
+
+        return routine;
+    }
+
+    @Override
+    public void saveRoutine(Routine routine) {
+        if (routine == null) {
+            throw new IllegalArgumentException("No routine given.");
+        } else if (routine.getUserId() < 1) {
+            throw new IllegalArgumentException("Invalid user ID given: " + routine.getUserId());
+        }
+
+        // Insert the routine
+        fitnessDao.insertRoutine(routine);
+
+        // Insert each set
+        routine.getSetList().forEach(fitnessDao::insertSet);
+    }
+
+    @Override
+    public void deleteRoutine(int routineId) {
+        if (routineId < 1) {
+            throw new IllegalArgumentException("Invalid routine ID given: " + routineId);
+        }
+
+        // Delete the routine
+        fitnessDao.deleteRoutine(routineId);
+
+        // Delete the sets that have the same routine ID
+        fitnessDao.deleteSetsByRoutineId(routineId);
+    }
 }
