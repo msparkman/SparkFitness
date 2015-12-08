@@ -48,4 +48,9 @@ public class SparkFitnessController {
     public void deleteRoutine(@PathVariable("routineId") int routineId) {
         workoutBo.deleteRoutine(routineId);
     }
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String defaultPage() {
+        return "Welcome to SparkFitness! View your last workout with /getLastRoutine/<userId>";
+    }
 }
