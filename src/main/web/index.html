@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html ng-app="">
-<head>
-<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-<script src="js/main.js"></script>
-</head>
-<body>
-<input type="text" ng-model="test" placeholder="Stuff goes here">
-<span>{{ test }}</span>
-</body>
+<html ng-app="sparkFitness">
+	<head>
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+		<script src="js/main.js"></script>
+	</head>
+	<body>
+		<div ng-controller="getLastRoutine">
+			<p>Type: {{routine.type}}</p>
+			<p>Name: {{routine.name}}</p>
+		</div>
+	</body>
 </html>

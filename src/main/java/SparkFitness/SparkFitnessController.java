@@ -1,21 +1,13 @@
 package SparkFitness;
 
-import SparkFitness.database.FitnessDAO;
 import SparkFitness.database.Routine;
-import SparkFitness.database.Set;
 import SparkFitness.server.WorkoutBo;
-import com.google.common.collect.Lists;
-import com.sun.corba.se.spi.orbutil.threadpool.Work;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.annotation.Resource;
-import javax.inject.Inject;
 import java.util.List;
 
 /**
