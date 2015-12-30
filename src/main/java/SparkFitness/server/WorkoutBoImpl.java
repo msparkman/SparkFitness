@@ -2,7 +2,6 @@ package SparkFitness.server;
 
 import SparkFitness.database.FitnessDAO;
 import SparkFitness.database.Routine;
-import SparkFitness.database.Set;
 import com.google.common.collect.Lists;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
