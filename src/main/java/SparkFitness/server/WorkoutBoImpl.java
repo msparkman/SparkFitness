@@ -2,6 +2,7 @@ package SparkFitness.server;
 
 import SparkFitness.database.FitnessDAO;
 import SparkFitness.database.Routine;
+import SparkFitness.database.Set;
 import com.google.common.collect.Lists;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,10 @@ public class WorkoutBoImpl implements WorkoutBo {
     FitnessDAO fitnessDao;
 
     private static final Logger LOGGER = Logger.getLogger(WorkoutBoImpl.class);
+
+    public void setFitnessDao(FitnessDAO fitnessDao) {
+        this.fitnessDao = fitnessDao;
+    }
 
     @Override
     public List<Routine> getAllRoutines(int userId) {
@@ -81,10 +86,13 @@ public class WorkoutBoImpl implements WorkoutBo {
             }
 
             // Insert the routine
-            fitnessDao.insertRoutine(routine);
+            int routineId = fitnessDao.insertRoutine(routine);
 
-            // Insert each set
-            routine.getSetList().forEach(fitnessDao::insertSet);
+            // Set the routine ID and insert each set
+            for (Set set : routine.getSetList()) {
+                set.setRoutineId(routineId);
+                fitnessDao.insertSet(set);
+            }
         } finally {
             LOGGER.info("End " + METHOD_NAME);
         }

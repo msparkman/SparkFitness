@@ -12,7 +12,7 @@ public class Set {
     private int weight;
     private String comment;
 
-    protected Set() {}
+    public Set() {}
 
     public int getSetId() {
         return setId;

@@ -4,9 +4,11 @@ import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Types;
+import java.sql.*;
 import java.util.List;
 
 /**
@@ -76,17 +78,30 @@ public class FitnessDAOImpl implements FitnessDAO {
     }
 
     @Override
-    public void insertRoutine(Routine routine) {
-        jdbcTemplate.update("INSERT INTO " +
+    public int insertRoutine(Routine routine) {
+        final String INSERT_SQL = "INSERT INTO " +
                 "routines " +
                 "(user_id," +
                 "date," +
                 "type," +
                 "name) " +
                 "VALUES " +
-                "(?, ?, ?, ?)",
-                new Object[] { routine.getUserId(), routine.getDate(), routine.getType(), routine.getName() },
-                new int[] { Types.INTEGER, Types.DATE, Types.VARCHAR, Types.VARCHAR });
+                "(?, ?, ?, ?)";
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps =
+                    connection.prepareStatement(INSERT_SQL, new String[] {"user_id", "date", "type", "name"});
+            ps.setInt(1, routine.getUserId());
+            ps.setDate(2, new Date(routine.getDate().getTime()));
+            ps.setString(3, routine.getType());
+            ps.setString(4, routine.getName());
+
+            return ps;
+
+        }, keyHolder);
+
+        return keyHolder.getKey().intValue();
     }
 
     @Override

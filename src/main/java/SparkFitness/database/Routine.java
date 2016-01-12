@@ -16,7 +16,7 @@ public class Routine {
     private String name;
     private List<Set> setList;
 
-    protected Routine() {}
+    public Routine() {}
 
     public int getRoutineId() {
         return routineId;

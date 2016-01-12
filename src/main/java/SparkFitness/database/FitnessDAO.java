@@ -32,8 +32,9 @@ public interface FitnessDAO {
      * Inserts a routine into the database.
      *
      * @param routine the routine
+     * @return int containing the routine ID
      */
-    void insertRoutine(Routine routine);
+    int insertRoutine(Routine routine);
 
     /**
      * Deletes a routine from the routine table.
