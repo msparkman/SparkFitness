@@ -1,5 +1,7 @@
 package SparkFitness.database;
 
+import com.google.common.collect.Lists;
+
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +19,10 @@ public class Routine {
     private List<Set> setList;
 
     public Routine() {}
+
+    public Routine(Set set) {
+        this.setList = Lists.newArrayList(set);
+    }
 
     public int getRoutineId() {
         return routineId;

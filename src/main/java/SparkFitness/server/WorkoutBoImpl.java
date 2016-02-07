@@ -37,7 +37,6 @@ public class WorkoutBoImpl implements WorkoutBo {
             }
 
             List<Routine> routinesList = fitnessDao.getRoutinesByUserId(userId);
-
             if (routinesList == null) {
                 return Lists.newArrayList();
             }
@@ -64,6 +63,10 @@ public class WorkoutBoImpl implements WorkoutBo {
             }
 
             Routine routine = fitnessDao.getLastRoutineByUserId(userId);
+            if (routine == null) {
+                return new Routine();
+            }
+
             // Get the sets for this routine
             routine.setSetList(fitnessDao.getSetsByRoutineId(routine.getRoutineId()));
 

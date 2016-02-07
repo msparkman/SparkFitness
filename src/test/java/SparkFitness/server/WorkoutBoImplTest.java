@@ -3,10 +3,14 @@ package SparkFitness.server;
 import SparkFitness.database.FitnessDAO;
 import SparkFitness.database.Routine;
 import SparkFitness.database.Set;
-import com.beust.jcommander.internal.Lists;
+import com.google.common.collect.Lists;
 import org.mockito.Mockito;
-import static org.mockito.Mockito.stub;
-import org.testng.annotations.AfterClass;
+
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Mockito.verify;
+
+import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -26,21 +30,43 @@ public class WorkoutBoImplTest {
         workoutBoImpl.setFitnessDao(fitnessDao);
     }
 
-    @Test(enabled = false)
-    public void testGetAllRoutines() {
-        workoutBoImpl.getAllRoutines(1);
+    @Test
+    public void test_getAllRoutines_happyPath() {
+        Mockito.when(fitnessDao.getRoutinesByUserId(0)).thenReturn(Lists.newArrayList(any(Routine.class)));
+        Mockito.when(fitnessDao.getSetsByRoutineId(0)).thenReturn(Lists.newArrayList(any(Set.class)));
+        Assert.assertNotNull(workoutBoImpl.getAllRoutines(1));
+    }
+
+    @Test
+    public void test_getAllRoutines_nullRoutineList() {
+        Mockito.when(fitnessDao.getRoutinesByUserId(0)).thenReturn(null);
+        Mockito.when(fitnessDao.getSetsByRoutineId(0)).thenReturn(Lists.newArrayList(any(Set.class)));
+        Assert.assertNotNull(workoutBoImpl.getAllRoutines(1));
+    }
+
+    @Test
+    public void test_getAllRoutines_nullSetList() {
+        Mockito.when(fitnessDao.getRoutinesByUserId(0)).thenReturn(Lists.newArrayList(any(Routine.class)));
+        Mockito.when(fitnessDao.getSetsByRoutineId(0)).thenReturn(null);
+        Assert.assertNotNull(workoutBoImpl.getAllRoutines(1));
+    }
+
+    @Test
+    public void test_getAllRoutines_nullRoutineListAndSetList() {
+        Mockito.when(fitnessDao.getRoutinesByUserId(0)).thenReturn(Lists.newArrayList(any(Routine.class)));
+        Mockito.when(fitnessDao.getSetsByRoutineId(0)).thenReturn(null);
+        Assert.assertNotNull(workoutBoImpl.getAllRoutines(1));
+    }
+
+    @Test
+    public void test_getLastRoutine_happyPath() {
+        Mockito.when(fitnessDao.getLastRoutineByUserId(0)).thenReturn(any(Routine.class));
+        Mockito.when(fitnessDao.getSetsByRoutineId(0)).thenReturn(Lists.newArrayList(any(Set.class)));
+        Assert.assertNotNull(workoutBoImpl.getLastRoutine(1));
     }
 
     @Test(enabled = false)
-    public void testGetLastRoutine() {
-        // TODO need to figure out how to stub db method return values to test against
-        stub(new Object());
-        workoutBoImpl.getLastRoutine(1);
-    }
-
-    @Test(enabled = false)
-    public void testSaveRoutine() {
-        // TODO need to create test constants for each of these values
+    public void test_saveRoutine_happyPath() {
         Routine routine = new Routine();
         routine.setRoutineId(1);
         routine.setUserId(1);
@@ -49,22 +75,15 @@ public class WorkoutBoImplTest {
         routine.setDate(new Date());
 
         Set set = new Set();
-        set.setSetId(1);
-        set.setRoutineId(1);
-        set.setNumberOfReps(10);
-        set.setComment("this is a test");
-        set.setWeight(100);
-
         routine.setSetList(Lists.newArrayList(set));
+        Mockito.when(fitnessDao.insertRoutine(any(Routine.class))).thenReturn(anyInt());
+        //Mockito.when(fitnessDao.insertSet(any(Set.class))).thenReturn();
         workoutBoImpl.saveRoutine(routine);
     }
 
     @Test(enabled = false)
-    public void testDeleteRoutine() {
+    public void test_deleteRoutine() {
         workoutBoImpl.deleteRoutine(1);
-    }
-
-    @AfterClass(enabled = false)
-    public void tearDown() {
+        verify(fitnessDao).deleteRoutine(1);
     }
 }
